@@ -1,9 +1,11 @@
 package com.pinyougou.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbBrandExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface TbBrandMapper {
     int countByExample(TbBrandExample example);
@@ -27,4 +29,8 @@ public interface TbBrandMapper {
     int updateByPrimaryKeySelective(TbBrand record);
 
     int updateByPrimaryKey(TbBrand record);
+    
+    Long findBrandByNameCount(String name) throws Exception;
+    
+    int deleteByBatchPrimaryKey(Long[] ids);
 }

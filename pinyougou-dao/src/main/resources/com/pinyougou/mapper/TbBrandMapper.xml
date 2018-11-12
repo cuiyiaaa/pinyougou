@@ -178,4 +178,16 @@
       first_char = #{firstChar,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="findBrandByNameCount" parameterType="java.lang.String" resultType="java.lang.Long">
+  		SELECT count(*) FROM tb_brand WHERE name=#{name}
+  </select>
+  
+  <delete id="deleteByBatchPrimaryKey" parameterType="java.util.ArrayList">
+  		DELETE FROM tb_brand WHERE id in
+  		<foreach collection="array" item="arr" open="(" close=")" separator=",">
+  			#{arr}
+  		</foreach>
+  </delete>
+  
 </mapper>

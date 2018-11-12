@@ -79,7 +79,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.pinyougou</groupId>
 			<artifactId>pinyougou-pojo</artifactId>
