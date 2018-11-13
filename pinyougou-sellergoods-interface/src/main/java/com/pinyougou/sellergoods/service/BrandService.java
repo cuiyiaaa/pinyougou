@@ -1,6 +1,7 @@
 package com.pinyougou.sellergoods.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.pinyougou.pojo.TbBrand;
 
@@ -12,7 +13,7 @@ import entity.PageResult;
  * @author cy
  *
  */
-public interface IBrandService {
+public interface BrandService {
 	/**
 	 * 查询所有的品牌
 	 * 
@@ -84,6 +85,10 @@ public interface IBrandService {
 	 */
 	public boolean deleteBatchBrand(Long[] ids) throws Exception;
 	
-	
+	/**
+	 * 返回下列列表的品牌数据
+	 * @return
+	 */
+	public List<Map<String, Object>> selectOptionList();
 
 }

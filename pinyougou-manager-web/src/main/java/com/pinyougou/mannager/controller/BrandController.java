@@ -1,6 +1,7 @@
 package com.pinyougou.mannager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbBrand;
-import com.pinyougou.sellergoods.service.IBrandService;
+import com.pinyougou.sellergoods.service.BrandService;
 
 import entity.PageResult;
 import entity.Result;
@@ -19,7 +20,7 @@ import entity.Result;
 public class BrandController {
 
 	@Reference
-	private IBrandService brandService;
+	private BrandService brandService;
 
 	/**
 	 * 查询所有
@@ -48,6 +49,7 @@ public class BrandController {
 
 	/**
 	 * 根据条件查询
+	 * 
 	 * @param pageIndex
 	 * @param pageSize
 	 * @param brand
@@ -90,10 +92,10 @@ public class BrandController {
 	 */
 	@RequestMapping("/findByNameCount")
 	public Result findByNameCount(String name) throws Exception {
-		//解决中文乱码
+		// 解决中文乱码
 		byte[] bytes = name.getBytes("ISO-8859-1");
 		name = new String(bytes, "UTF-8");
-		
+
 		System.out.println(name);
 		if (brandService.findBrandByNameCount(name) > 0) {
 			return new Result(false, "该品牌已存在");
@@ -152,5 +154,10 @@ public class BrandController {
 			e.printStackTrace();
 			return new Result(false, "删除失败");
 		}
+	}
+
+	@RequestMapping("/selectOptionList")
+	public List<Map<String, Object>> selectOptionList() {
+		return brandService.selectOptionList();
 	}
 }

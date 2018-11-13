@@ -1,6 +1,7 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,12 +12,12 @@ import com.pinyougou.mapper.TbBrandMapper;
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbBrandExample;
 import com.pinyougou.pojo.TbBrandExample.Criteria;
-import com.pinyougou.sellergoods.service.IBrandService;
+import com.pinyougou.sellergoods.service.BrandService;
 
 import entity.PageResult;
 
 @Service
-public class BrandServiceImpl implements IBrandService {
+public class BrandServiceImpl implements BrandService {
 
 	@Autowired
 	private TbBrandMapper brandMapper;
@@ -95,5 +96,10 @@ public class BrandServiceImpl implements IBrandService {
 	@Override
 	public boolean deleteBatchBrand(Long[] ids) throws Exception {
 		return brandMapper.deleteByBatchPrimaryKey(ids) > 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOptionList() {
+		return brandMapper.selectOptionList();
 	}
 }

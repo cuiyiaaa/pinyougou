@@ -1,6 +1,7 @@
 package com.pinyougou.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +34,6 @@ public interface TbBrandMapper {
     Long findBrandByNameCount(String name) throws Exception;
     
     int deleteByBatchPrimaryKey(Long[] ids);
+    
+    List<Map<String, Object>> selectOptionList();
 }

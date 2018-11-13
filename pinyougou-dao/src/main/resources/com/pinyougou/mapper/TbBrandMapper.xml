@@ -190,4 +190,20 @@
   		</foreach>
   </delete>
   
+  <select id="selectOptionList" resultType="java.util.Map">
+  	 SELECT id,name as text FROM tb_brand
+  </select>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

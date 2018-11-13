@@ -5,15 +5,20 @@ import java.io.Serializable;
 public class TbTypeTemplate implements Serializable {
  
 	private static final long serialVersionUID = 1L;
-
+	
+	//主键
 	private Long id;
 
+	//模板名称
     private String name;
 
+    //关联规格
     private String specIds;
 
+    //关联品牌
     private String brandIds;
 
+    //扩展属性
     private String customAttributeItems;
 
     public Long getId() {
