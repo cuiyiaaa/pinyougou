@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbSeller implements Serializable {
-    
+
 	private static final long serialVersionUID = 1L;
 
 	private String sellerId;
@@ -54,6 +54,8 @@ public class TbSeller implements Serializable {
     private String bankUser;
 
     private String bankName;
+
+    private String bankId;
 
     public String getSellerId() {
         return sellerId;
@@ -245,5 +247,13 @@ public class TbSeller implements Serializable {
 
     public void setBankName(String bankName) {
         this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(String bankId) {
+        this.bankId = bankId == null ? null : bankId.trim();
     }
 }

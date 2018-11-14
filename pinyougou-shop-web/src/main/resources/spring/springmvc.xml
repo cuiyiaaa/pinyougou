@@ -35,5 +35,6 @@
 		address="zookeeper://192.168.25.128:2181" />
 	<dubbo:annotation
 		package="com.pinyougou.shop.controller" />
-
+		
+		
 </beans>
