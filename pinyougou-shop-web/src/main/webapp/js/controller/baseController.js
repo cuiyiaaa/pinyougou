@@ -50,5 +50,39 @@ app.controller("baseController", function($scope) {
 		}
 		return value;
 	}
+	
+	/**
+	 * 在集合中根据key的值查询对应
+	 * list:要查询的集合
+	 * key:查找的key
+	 * keyValue:key的值
+	 */
+	$scope.searchObjKey=function(list,key,keyValue){
+		for (var i = 0; i < list.length; i++) {
+			if(list[i][key]===keyValue){
+				return list[i];
+			}
+		}
+		return null;
+	};
 
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

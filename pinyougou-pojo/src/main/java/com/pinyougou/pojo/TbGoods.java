@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 public class TbGoods implements Serializable {
    
+
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -166,4 +167,13 @@ public class TbGoods implements Serializable {
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete == null ? null : isDelete.trim();
     }
+    
+    @Override
+	public String toString() {
+		return "TbGoods [id=" + id + ", sellerId=" + sellerId + ", goodsName=" + goodsName + ", defaultItemId="
+				+ defaultItemId + ", auditStatus=" + auditStatus + ", isMarketable=" + isMarketable + ", brandId="
+				+ brandId + ", caption=" + caption + ", category1Id=" + category1Id + ", category2Id=" + category2Id
+				+ ", category3Id=" + category3Id + ", smallPic=" + smallPic + ", price=" + price + ", typeTemplateId="
+				+ typeTemplateId + ", isEnableSpec=" + isEnableSpec + ", isDelete=" + isDelete + "]";
+	}
 }

@@ -44,7 +44,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
-		
+
 		<!-- spring security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -92,6 +92,7 @@
 		</dependency>
 
 
+
 		<dependency>
 			<groupId>com.pinyougou</groupId>
 			<artifactId>pinyougou-pojo</artifactId>
@@ -102,6 +103,13 @@
 		<dependency>
 			<groupId>com.pinyougou</groupId>
 			<artifactId>pinyougou-sellergoods-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

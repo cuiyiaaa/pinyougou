@@ -50,7 +50,7 @@ public class GoodsController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbGoods goods){
 		try {
-			goodsService.add(goods);
+			//goodsService.add(goods);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
 			e.printStackTrace();

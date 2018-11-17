@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +77,33 @@ public class ItemCatServiceImpl implements ItemCatService {
 	 * 批量删除
 	 */
 	@Override
-	public void delete(Long[] ids) {
+	public List<Long> delete(Long[] ids) {
+		List<Long> idList = new ArrayList<>();
+		
+		
+		TbItemCatExample example = new TbItemCatExample();
+		Criteria criteria = example.createCriteria();
+		
 		for (Long id : ids) {
+			// 查询当前分类下是否还有其他分类
+			
+			criteria.andParentIdEqualTo(id);
+			List<TbItemCat> itemcatList = itemCatMapper.selectByExample(example);
+			
+			//清除所有条件
+			example.clear();
+			
+			// 当前分类下存在其他分类
+			if (itemcatList.size() > 0 || itemcatList == null) {
+				idList.add(id);
+				continue;
+			}
+
+			// 删除失败
 			itemCatMapper.deleteByPrimaryKey(id);
 		}
+
+		return idList;
 	}
 
 	@Override
@@ -98,6 +122,18 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 		Page<TbItemCat> page = (Page<TbItemCat>) itemCatMapper.selectByExample(example);
 		return new PageResult<TbItemCat>(page.getTotal(), page.getResult());
+	}
+
+	@Override
+	public List<TbItemCat> findByParentId(Long parentId) {
+		// 设置查询条件
+		TbItemCatExample example = new TbItemCatExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andParentIdEqualTo(parentId);
+
+		// 查询
+		List<TbItemCat> itemcatList = itemCatMapper.selectByExample(example);
+		return itemcatList;
 	}
 
 }

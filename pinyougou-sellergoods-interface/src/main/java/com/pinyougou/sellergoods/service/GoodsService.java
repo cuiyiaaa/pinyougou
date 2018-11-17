@@ -2,6 +2,7 @@ package com.pinyougou.sellergoods.service;
 import java.util.List;
 
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojogroup.Goodsgroup;
 
 import entity.PageResult;
 /**
@@ -28,7 +29,7 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbGoods goods);
+	public void add(Goodsgroup goods);
 	
 	
 	/**

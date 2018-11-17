@@ -92,8 +92,8 @@ public class ItemCatController {
 	@RequestMapping("/delete")
 	public Result delete(Long [] ids){
 		try {
-			itemCatService.delete(ids);
-			return new Result(true, "删除成功"); 
+			List<Long> idList = itemCatService.delete(ids);
+			return new Result(true, idList.toString()); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false, "删除失败");
@@ -110,6 +110,16 @@ public class ItemCatController {
 	@RequestMapping("/search")
 	public PageResult<TbItemCat> search(@RequestBody TbItemCat itemCat, int page, int rows  ){
 		return itemCatService.findPage(itemCat, page, rows);		
+	}
+	
+	/**
+	 * 根据上级ID查询分类列表
+	 * @param parentId
+	 * @return
+	 */
+	@RequestMapping("/findByParentId")
+	public List<TbItemCat> findByParentId(Long parentId) {
+		return itemCatService.findByParentId(parentId);
 	}
 	
 }

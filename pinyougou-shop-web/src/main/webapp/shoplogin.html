@@ -11,6 +11,11 @@
 <link rel="stylesheet" type="text/css" href="css/webbase.css" />
 <link rel="stylesheet" type="text/css" href="css/pages-shoplogin.css" />
 <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+<script type="text/javascript">
+	if (window.parent.window != window) {
+		window.top.location.href = "/shoplogin.html";
+	}
+</script>
 </head>
 
 <body>
@@ -75,7 +80,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -98,7 +102,7 @@
 	</div>
 
 	<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- 	<script src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+	<!-- 	<script src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
 	<script src="js/plugins/sui/sui.min.js"></script>
 	<script src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 	<script src="js/pages/shoplogin.js"></script> -->
