@@ -39,7 +39,7 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou"
-	ng-controller="goodsController" ng-init="itemCat1List()">
+	ng-controller="goodsController" ng-init="itemCat1List();findOne()">
 
 	<!-- 正文区域 -->
 	<section class="content">
@@ -95,7 +95,9 @@
 							<div class="col-md-2 title">品牌</div>
 							<div class="col-md-10 data">
 								<select class="form-control" ng-model="entity.goods.brandId"
-									ng-options="brand.id as brand.text for brand in brandList"></select>
+									ng-options="brand.id as brand.text for brand in brandList">
+									
+								</select>
 							</div>
 
 							<div class="col-md-2 title">副标题</div>
@@ -194,19 +196,22 @@
 						<div class="row data-type">
 							<div class="col-md-2 title">是否启用规格</div>
 							<div class="col-md-10 data">
-								<input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="entity.goods.IsEnableSpec">
+								<input type="checkbox" ng-true-value="1" ng-false-value="0"
+									ng-model="entity.goods.isEnableSpec">
 							</div>
 						</div>
 						<!--<p>  -->
 						<!-- 只有当启用规格时才显示下列信息 -->
-						<div ng-show="entity.goods.IsEnableSpec==1">
+						<div ng-show="entity.goods.isEnableSpec==1">
 							<div class="row data-type">
 								<div ng-repeat="spec in specList">
 									<div class="col-md-2 title">{{spec.text}}</div>
 									<div class="col-md-10 data">
 										<span ng-repeat="option in spec.options"><input
 											type="checkbox"
-											ng-click="updateSpecAttribute($event,spec.text,option.optionName);createItemList()">{{option.optionName}}</span>
+											ng-click="updateSpecAttribute($event,spec.text,option.optionName);createItemList()"
+											ng-checked="isChecked(spec.text,option.optionName)"
+											>{{option.optionName}}</span>
 									</div>
 								</div>
 							</div>
@@ -232,12 +237,14 @@
 									<tbody>
 										<tr ng-repeat="item in entity.itemList">
 											<td ng-repeat="spec in entity.goodsDesc.specificationItems">{{item.spec[spec.attributeName]}}</td>
-											<td><input class="form-control" ng-model="item.price" placeholder="价格">
-											</td>
-											<td><input class="form-control" ng-model="item.num" placeholder="库存数量">
-											</td>
-											<td><input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="item.status"></td>
-											<td><input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="item.isDefault"></td>
+											<td><input class="form-control" ng-model="item.price"
+												placeholder="价格"></td>
+											<td><input class="form-control" ng-model="item.num"
+												placeholder="库存数量"></td>
+											<td><input type="checkbox" ng-true-value="1"
+												ng-false-value="0" ng-model="item.status"></td>
+											<td><input type="checkbox" ng-true-value="1"
+												ng-false-value="0" ng-model="item.isDefault"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -254,10 +261,11 @@
 			</div>
 		</div>
 		<div class="btn-toolbar list-toolbar">
-			<button class="btn btn-primary" ng-click="add()">
+			<button class="btn btn-primary" ng-click="save()">
 				<i class="fa fa-save"></i>保存
 			</button>
-			<button class="btn btn-default">返回列表</button>
+			
+			<a href="goods.html" class="btn btn-default">返回列表</a>
 		</div>
 
 	</section>

@@ -60,11 +60,9 @@ public class GoodsController {
 		try {
 			// 获取当前的商家信息
 			String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-			System.out.println(sellerId);
 			// 将当前添加的商品与商家关联
 			goods.getGoods().setSellerId(sellerId);
-			
-			
+
 			goodsService.add(goods);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
@@ -80,8 +78,18 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods) {
+	public Result update(@RequestBody Goodsgroup goods) {
 		try {
+			String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+			
+			Goodsgroup tbGoodsgroup = goodsService.findOne(goods.getGoods().getId());
+			
+			//判断该商品是否属于该商家， 如果当前商品的商家id与当前系统登录的商家Id不一致时，则结束修改
+			if (!goods.getGoods().getSellerId().equals(sellerId)||!tbGoodsgroup.getGoods().getSellerId().equals(sellerId)) {
+				return new Result(false, "非法操作");
+			}
+
 			goodsService.update(goods);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
@@ -97,7 +105,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbGoods findOne(Long id) {
+	public Goodsgroup findOne(Long id) {
 		return goodsService.findOne(id);
 	}
 
@@ -128,7 +136,22 @@ public class GoodsController {
 	 */
 	@RequestMapping("/search")
 	public PageResult<TbGoods> search(@RequestBody TbGoods goods, int page, int rows) {
+
+		// 获取当前商家信息
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		goods.setSellerId(sellerId);
+
 		return goodsService.findPage(goods, page, rows);
 	}
-
+	
+	@RequestMapping("/updateMarketable")
+	public Result updateMarketable(Long[] goodsId,String marketable) {
+		try {
+			goodsService.updateMarketable(goodsId, marketable);
+			return new Result(true, "修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "修改失败");
+		}
+	}
 }

@@ -28,10 +28,23 @@ app.controller("baseController", function($scope) {
 		if ($event.target.checked) {
 			// 点击选中,则添加
 			$scope.selectIds.push(id);
+
+			var flag = true;
+			$('.childBox').each(function() {
+				if (!this.checked) {
+					flag = false;
+					return false;
+				}
+			});
+			if (flag) {
+				$("#selall").prop('checked', true);
+			}
 		} else {
 			// 取消选中
 			var index = $scope.selectIds.indexOf(id); // 查找元素在数组中的索引
 			$scope.selectIds.splice(index, 1); // 参数1：起点，参数2：参数几个
+
+			$("#selall").prop('checked', false);
 		}
 	};
 
@@ -43,46 +56,26 @@ app.controller("baseController", function($scope) {
 		var value = "";
 		for (var i = 0; i < json.length; i++) {
 			value += json[i][key];
-			if (i < json.length - 1) {	
-				//最后一个不添加逗号
+			if (i < json.length - 1) {
+				// 最后一个不添加逗号
 				value += ",";
 			}
 		}
 		return value;
 	}
-	
+
 	/**
-	 * 在集合中根据key的值查询对应
-	 * list:要查询的集合
-	 * key:查找的key
-	 * keyValue:key的值
+	 * 在集合中根据key的值查询对应 list:要查询的集合 key:查找的key keyValue:key的值
 	 */
-	$scope.searchObjKey=function(list,key,keyValue){
-		for (var i = 0; i < list.length; i++) {
-			if(list[i][key]===keyValue){
-				return list[i];
+	$scope.searchObjKey = function(list, key, keyValue) {
+		if (list != null) {
+			for (var i = 0; i < list.length; i++) {
+				if (list[i][key] === keyValue) {
+					return list[i];
+				}
 			}
 		}
 		return null;
 	};
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

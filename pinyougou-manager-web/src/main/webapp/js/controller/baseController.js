@@ -5,6 +5,7 @@ app.controller("baseController", function($scope) {
 	// 刷新列表，因为很多地方都需要调用，所以将其提取出来
 	$scope.reloadList = function() {
 		$scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+		$("#selall").prop('checked', false);
 	};
 
 	// 引入分页组件配置
@@ -28,12 +29,26 @@ app.controller("baseController", function($scope) {
 		if ($event.target.checked) {
 			// 点击选中,则添加
 			$scope.selectIds.push(id);
+			
+			var flag = true;
+			$('.childBox').each(function() {
+				if (!this.checked) {
+					flag = false;
+					return false;
+				}
+			});
+			if (flag) {
+				$("#selall").prop('checked', true);
+			}
 		} else {
 			// 取消选中
 			var index = $scope.selectIds.indexOf(id); // 查找元素在数组中的索引
 			$scope.selectIds.splice(index, 1); // 参数1：起点，参数2：参数几个
+			
+			$("#selall").prop('checked', false);
 		}
 	};
+	
 
 	// 获取json中指定Key的值
 	$scope.jsonTostring = function(jsonString, key) {

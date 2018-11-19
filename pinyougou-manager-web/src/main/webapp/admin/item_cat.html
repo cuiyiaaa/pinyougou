@@ -52,7 +52,8 @@
 							data-toggle="modal" data-target="#editModal" ng-click="entity={}">
 							<i class="fa fa-file-o"></i> 新建
 						</button>
-						<button type="button" class="btn btn-default" title="删除" ng-click="dele()">
+						<button type="button" class="btn btn-default" title="删除"
+							ng-click="dele()">
 							<i class="fa fa-trash-o"></i> 删除
 						</button>
 						<button type="button" class="btn btn-default" title="刷新">
@@ -79,7 +80,8 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="entity in list">
-						<td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+						<td><input type="checkbox"
+							ng-click="updateSelection($event,entity.id)" class="childBox"></td>
 						<td>{{entity.id}}</td>
 						<td>{{entity.name}}</td>
 						<td>{{entity.typeId}}</td>
@@ -88,7 +90,8 @@
 								ng-show="grade<3"
 								ng-click="setGrade(grade+1);breadcrumbNav(entity);selectIds.length=0">查询下级</button>
 							<button type="button" class="btn bg-olive btn-xs"
-								data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)">修改</button>
+								data-toggle="modal" data-target="#editModal"
+								ng-click="findOne(entity.id)">修改</button>
 						</td>
 					</tr>
 				</tbody>
@@ -133,8 +136,8 @@
 						<tr>
 							<td>类型模板</td>
 							<td><input select2 select2-model="entity.typeId"
-								config="dataList"  placeholder="商品类型模板"
-								class="form-control" type="text" /></td>
+								config="dataList" placeholder="商品类型模板" class="form-control"
+								type="text" /></td>
 						</tr>
 					</table>
 
@@ -157,4 +160,5 @@
 <script src="../js/controller/baseController.js"></script>
 <script src="../js/controller/itemCatController.js"></script>
 <script src="../plugins/angularjs/angular-select2.js"></script>
+<script type="text/javascript" src="../js/checkbox.js"></script>
 </html>

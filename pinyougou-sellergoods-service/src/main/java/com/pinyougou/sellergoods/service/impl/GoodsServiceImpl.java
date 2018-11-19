@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -24,6 +25,7 @@ import com.pinyougou.pojo.TbGoodsExample;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbItemCat;
+import com.pinyougou.pojo.TbItemExample;
 import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.pojogroup.Goodsgroup;
 import com.pinyougou.sellergoods.service.GoodsService;
@@ -38,6 +40,7 @@ import entity.PageResult;
  */
 @Service
 @SuppressWarnings("all")
+@Transactional
 public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
@@ -54,7 +57,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
 	private TbSellerMapper sellerMapper;
-	
+
 	@Autowired
 	private TbItemMapper itemMapper;
 
@@ -82,16 +85,21 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public void add(Goodsgroup goods) {
 		// 插入商品基本信息
-		TbGoods tbGoods = goods.getGoods();
 		// 设置商品状态为未审核
-		tbGoods.setAuditStatus("0");
-		goodsMapper.insert(tbGoods);
-
+		goods.getGoods().setAuditStatus("0");
+		goods.getGoods().setIsMarketable("1");
+		goodsMapper.insert(goods.getGoods());
 		// 添加商品扩展信息
-		TbGoodsDesc tbGoodsDesc = goods.getGoodsDesc();
 		// 将商品基本信息表的id给商品信息扩展表的id，因为 将两张表合并起来才是一条完整的商品数据
-		tbGoodsDesc.setGoodsId(tbGoods.getId());
-		goodsDescMapper.insert(tbGoodsDesc);
+		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
+		goodsDescMapper.insert(goods.getGoodsDesc());
+
+		saveItemList(goods);
+	}
+
+	private void saveItemList(Goodsgroup goods) {
+		TbGoods tbGoods = goods.getGoods();
+		TbGoodsDesc tbGoodsDesc = goods.getGoodsDesc();
 
 		// 启用规格
 		if ("1".equals(tbGoods.getIsEnableSpec())) {
@@ -107,32 +115,31 @@ public class GoodsServiceImpl implements GoodsService {
 				item.setTitle(title);
 
 				setItemValue(tbGoods, tbGoodsDesc, item);
-				
+
 				System.out.println(item);
 				itemMapper.insert(item);
 			}
-		}else {
-			//没有启用规格
-			TbItem item=new TbItem();
-			//标题名称
+		} else {
+			// 没有启用规格
+			TbItem item = new TbItem();
+			// 标题名称
 			item.setTitle(tbGoods.getGoodsName());
-			//价格
+			// 价格
 			item.setPrice(tbGoods.getPrice());
-			//设置为默认
+			// 设置为默认
 			item.setIsDefault("1");
-			//设置为启用状态
+			// 设置为启用状态
 			item.setStatus("1");
-			
+
 			setItemValue(tbGoods, tbGoodsDesc, item);
 			System.out.println(item);
 			itemMapper.insert(item);
 		}
-		
-		System.out.println(goods);
 	}
 
 	/**
 	 * 为TbItem赋值
+	 * 
 	 * @param tbGoods
 	 * @param tbGoodsDesc
 	 * @param item
@@ -142,7 +149,7 @@ public class GoodsServiceImpl implements GoodsService {
 		item.setUpdateTime(new Date());
 		item.setCreateTime(new Date());
 
-		//商品Id
+		// 商品Id
 		item.setGoodsId(tbGoods.getId());
 
 		// 商家id
@@ -173,8 +180,20 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 修改
 	 */
 	@Override
-	public void update(TbGoods goods) {
-		goodsMapper.updateByPrimaryKey(goods);
+	public void update(Goodsgroup goods) {
+		// 更新商品信息
+		goodsMapper.updateByPrimaryKey(goods.getGoods());
+		// 更新商品扩展信息
+		goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());
+
+		// 更新商品sku：先将该商品的SKU全部删除，在进行添加
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(goods.getGoods().getId());
+		itemMapper.deleteByExample(example);
+
+		// 删除之后进行添加
+		saveItemList(goods);
 	}
 
 	/**
@@ -184,8 +203,25 @@ public class GoodsServiceImpl implements GoodsService {
 	 * @return
 	 */
 	@Override
-	public TbGoods findOne(Long id) {
-		return goodsMapper.selectByPrimaryKey(id);
+	public Goodsgroup findOne(Long id) {
+		Goodsgroup goods = new Goodsgroup();
+
+		// 根据商品id查询商品
+		TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+		// 根据商品Id查询商品扩展信息
+		TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+
+		// 根据商品id查询该商品的sku
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(id);
+		List<TbItem> itemList = itemMapper.selectByExample(example);
+
+		goods.setGoods(tbGoods);
+		goods.setGoodsDesc(tbGoodsDesc);
+		goods.setItemList(itemList);
+
+		return goods;
 	}
 
 	/**
@@ -207,7 +243,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 		if (goods != null) {
 			if (goods.getSellerId() != null && goods.getSellerId().length() > 0) {
-				criteria.andSellerIdLike("%" + goods.getSellerId() + "%");
+				criteria.andSellerIdEqualTo(goods.getSellerId());
 			}
 			if (goods.getGoodsName() != null && goods.getGoodsName().length() > 0) {
 				criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
@@ -235,6 +271,30 @@ public class GoodsServiceImpl implements GoodsService {
 
 		Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
 		return new PageResult<TbGoods>(page.getTotal(), page.getResult());
+	}
+
+	@Override
+	public void updateStatus(Long[] goodsId, String status) {
+		if (goodsId.length > 0) {
+			for (Long id : goodsId) {
+				TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+				tbGoods.setAuditStatus(status);
+
+				goodsMapper.updateByPrimaryKey(tbGoods);
+			}
+		}
+	}
+
+	@Override
+	public void updateMarketable(Long[] goodsId, String marketable) {
+		if (goodsId.length > 0) {
+			for (Long id : goodsId) {
+				TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+				tbGoods.setIsMarketable(marketable);
+
+				goodsMapper.updateByPrimaryKey(tbGoods);
+			}
+		}
 	}
 
 }

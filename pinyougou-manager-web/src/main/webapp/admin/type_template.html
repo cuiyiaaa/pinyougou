@@ -103,7 +103,7 @@
 				<tbody>
 					<tr ng-repeat="entity in list">
 						<td><input type="checkbox"
-							ng-click="updateSelection($event,entity.id)"></td>
+							ng-click="updateSelection($event,entity.id)" class="childBox"></td>
 						<td>{{entity.id}}</td>
 						<td>{{entity.name}}</td>
 						<td>{{jsonTostring(entity.brandIds,'text')}}</td>
@@ -201,7 +201,7 @@
 			</div>
 		</div>
 	</div>
-
+	<script type="text/javascript" src="../js/checkbox.js"></script>
 </body>
 
 </html>
