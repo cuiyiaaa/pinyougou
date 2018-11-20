@@ -143,8 +143,6 @@ app.controller('goodsController', function($scope, $controller, $location,goodsS
 			return;
 		}
 		
-		
-		
 		uploadService.uploadFile().success(result=>{
 			if(result.success){
 				// 将返回的url设置给图片，让图片显示
