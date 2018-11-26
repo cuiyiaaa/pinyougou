@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -36,7 +37,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	private TbTypeTemplateMapper typeTemplateMapper;
 	@Autowired
 	private TbSpecificationOptionMapper specMapper;
-
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 	/**
 	 * 查询全部
 	 */
@@ -116,7 +118,29 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		}
 
 		Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
+		
+		cacheBrandAndSpec();
+		
 		return new PageResult<TbTypeTemplate>(page.getTotal(), page.getResult());
+	}
+
+	/**
+	 * 缓存模板中的品牌和规格
+	 */
+	private void cacheBrandAndSpec() {
+		//查询所有的模板
+		List<TbTypeTemplate> templateList = findAll();
+		
+		for (TbTypeTemplate template : templateList) {
+			//缓存品牌，以模板id为key 对应的品牌为value
+			List<Map> brandList = JSON.parseArray(template.getBrandIds(), Map.class);
+			redisTemplate.boundHashOps("brandList").put(template.getId(), brandList);
+			
+			//缓存规格，以模板id为key 对应的规格详细信息为value
+			List<Map> specList = findSpecList(template.getId());
+			redisTemplate.boundHashOps("specList").put(template.getId(), specList);	
+		}
+		System.out.println("缓存品牌和规格");
 	}
 
 	@Override
@@ -139,9 +163,26 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
 			List<TbSpecificationOption> options = specMapper.selectByExample(example);
 
-			map.put("options", options);
+			map.put("options", options); //{"id":"27","text":"网络","options":[{id:1,optionName:'2g'},{id:1,optionName:'3g'}...]}
 		}
-
+		
 		return list;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

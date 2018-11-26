@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -225,12 +226,17 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	/**
-	 * 批量删除
+	 * 批量删除：进行逻辑删除
 	 */
 	@Override
 	public void delete(Long[] ids) {
 		for (Long id : ids) {
-			goodsMapper.deleteByPrimaryKey(id);
+			// 逻辑删除
+			TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+			System.out.println("状态:"+tbGoods.getAuditStatus());
+			tbGoods.setIsDelete("1");
+			goodsMapper.updateByPrimaryKey(tbGoods);
+			updateSku(id,"0");
 		}
 	}
 
@@ -279,8 +285,9 @@ public class GoodsServiceImpl implements GoodsService {
 			for (Long id : goodsId) {
 				TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
 				tbGoods.setAuditStatus(status);
-
 				goodsMapper.updateByPrimaryKey(tbGoods);
+
+				updateSku(id, status);
 			}
 		}
 	}
@@ -297,4 +304,34 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 	}
 
+	@Override
+	public List<TbItem> findItemListByGoodsId(Long[] goodsIds, String status) {
+		// 设置查询条件
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdIn(Arrays.asList(goodsIds));
+		
+		criteria.andStatusEqualTo(status); // 已审核
+
+		return itemMapper.selectByExample(example);
+	}
+
+	/**
+	 * 根据商品的Id查询到对应的sku，并修改其状态
+	 * @param id
+	 * @param status
+	 */
+	private void updateSku(Long id, String status) {
+		// 更新每个商品sku的状态
+		// 根据商品id，查询出对应的sku列表
+		TbItemExample example = new TbItemExample();
+		com.pinyougou.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(id);
+		List<TbItem> itemList = itemMapper.selectByExample(example);
+		for (TbItem item : itemList) {
+			item.setStatus(status);
+			// 更新
+			itemMapper.updateByPrimaryKey(item);
+		}
+	}
 }

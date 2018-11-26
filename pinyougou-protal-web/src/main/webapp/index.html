@@ -15,8 +15,8 @@
 	href="css/widget-cartPanelView.css" />
 <script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
-<script type="text/javascript" src="js/controller/contentController.js"></script>
 <script type="text/javascript" src="js/service/contentService.js"></script>
+<script type="text/javascript" src="js/controller/contentController.js"></script>
 
 </head>
 <body ng-app="pinyougou" ng-controller="contentController"
@@ -73,8 +73,10 @@
 									<!--searchAutoComplete-->
 									<div class="input-append">
 										<input type="text" id="autocomplete" type="text"
-											class="input-error input-xxlarge" />
-										<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+											class="input-error input-xxlarge" ng-model="keywords" /> <a
+											class="sui-btn btn-xlarge btn-danger"
+											href="http://localhost:9104/search.html#?keywords={{keywords}}"
+											 target="_blank">搜索</a>
 									</div>
 								</form>
 							</div>
@@ -901,14 +903,16 @@
 					<div id="myCarousel" data-ride="carousel" data-interval="4000"
 						class="sui-carousel slide">
 						<ol class="carousel-indicators">
-							<li data-target="#myCarousel" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" ng-repeat="item in categoryList[1]"></li>
+							<li data-target="#myCarousel" data-slide-to="{{$index}}"
+								class="{{$index==0?'active':''}}"
+								ng-repeat="item in categoryList[1]"></li>
 
 						</ol>
 						<div class="carousel-inner">
 
-							<div class="{{$index==0?'active':''}} item" ng-repeat="item in categoryList[1]">
-								<a href="{{item.url}}"> <img
-									src="{{item.pic}}" />
+							<div class="{{$index==0?'active':''}} item"
+								ng-repeat="item in categoryList[1]">
+								<a href="{{item.url}}"> <img src="{{item.pic}}" />
 								</a>
 							</div>
 

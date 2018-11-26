@@ -2,6 +2,7 @@ package com.pinyougou.sellergoods.service;
 import java.util.List;
 
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goodsgroup;
 
 import entity.PageResult;
@@ -73,4 +74,12 @@ public interface GoodsService {
 	 * @param marketable
 	 */
 	public void updateMarketable(Long[] goodsId,String marketable);
+	
+	/**
+	 * 根据SPU的Id查询对应的SKU
+	 * @param goodsIds 商品id集合
+	 * @param status 商品状态
+	 * @return
+	 */
+	List<TbItem> findItemListByGoodsId(Long[] goodsIds,String status);
 }

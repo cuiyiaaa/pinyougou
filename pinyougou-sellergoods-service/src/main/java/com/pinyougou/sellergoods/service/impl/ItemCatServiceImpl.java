@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -29,6 +30,9 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
+
+	@Autowired
+	private RedisTemplate<String,Object> redisTemplate;
 
 	/**
 	 * 查询全部
@@ -81,20 +85,19 @@ public class ItemCatServiceImpl implements ItemCatService {
 	@Override
 	public List<Long> delete(Long[] ids) {
 		List<Long> idList = new ArrayList<>();
-		
-		
+
 		TbItemCatExample example = new TbItemCatExample();
 		Criteria criteria = example.createCriteria();
-		
+
 		for (Long id : ids) {
 			// 查询当前分类下是否还有其他分类
-			
+
 			criteria.andParentIdEqualTo(id);
 			List<TbItemCat> itemcatList = itemCatMapper.selectByExample(example);
-			
-			//清除所有条件
+
+			// 清除所有条件
 			example.clear();
-			
+
 			// 当前分类下存在其他分类
 			if (itemcatList.size() > 0 || itemcatList == null) {
 				idList.add(id);
@@ -133,9 +136,24 @@ public class ItemCatServiceImpl implements ItemCatService {
 		Criteria criteria = example.createCriteria();
 		criteria.andParentIdEqualTo(parentId);
 
-		// 查询
-		List<TbItemCat> itemcatList = itemCatMapper.selectByExample(example);
-		return itemcatList;
+		cacheTypeId();
+		return itemCatMapper.selectByExample(example);
 	}
 
+	/**
+	 * 查询所有的商品分类，并存入缓存中，以当前商品分类名称为key，模板Id为value
+	 */
+	private void cacheTypeId() {
+		List<TbItemCat> itemCatList = findAll();
+		for (TbItemCat tbItemCat : itemCatList) {
+			redisTemplate.boundHashOps("itemCat").put(tbItemCat.getName(), tbItemCat.getTypeId());
+		}
+		System.out.println("将模板Id放入缓存中");
+	}
 }
+
+
+
+
+
+
