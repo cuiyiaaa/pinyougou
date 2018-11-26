@@ -63,6 +63,7 @@ app.controller('goodsController', function($scope, $controller, goodsService, it
 			if (response.success) {
 				$scope.reloadList();// 刷新列表
 				$scope.selectIds = [];
+				alert("删除成功");
 			}
 		});
 	}
