@@ -182,7 +182,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 	 */
 	private void filter(Map<String, Object> searchMap, HighlightQuery query) {
 		// 设置过滤条件
-
+		
 		// 过滤商品分类
 		if (!"".equals(searchMap.get("category"))) {
 

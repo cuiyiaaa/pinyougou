@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goodsgroup;
@@ -35,6 +36,9 @@ public class GoodsController {
 
 	@Reference(timeout = 100000)
 	private ItemSearchService itemSearchService;
+
+	@Reference(timeout = 40000)
+	private ItemPageService itemPageService;
 
 	/**
 	 * 返回全部列表
@@ -160,8 +164,13 @@ public class GoodsController {
 						tbItem.setSpecMap(parseObject);
 					}
 
-					// 导入
+					// 导入到solr索引库
 					itemSearchService.importList(itemList);
+					
+					//生成商品详情页
+					for (Long goodsId : ids) {
+						itemPageService.genItemHtml(goodsId);
+					}
 				}
 			}
 
@@ -171,4 +180,14 @@ public class GoodsController {
 			return new Result(false, "修改失败");
 		}
 	}
+
+	@RequestMapping("/genHtml")
+	public void genHtml(Long goodsId) {
+		itemPageService.genItemHtml(goodsId);
+	}
 }
+
+
+
+
+
