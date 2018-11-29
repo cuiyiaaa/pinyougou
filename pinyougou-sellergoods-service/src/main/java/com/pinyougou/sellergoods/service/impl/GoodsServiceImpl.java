@@ -238,6 +238,7 @@ public class GoodsServiceImpl implements GoodsService {
 			goodsMapper.updateByPrimaryKey(tbGoods);
 			updateSku(id,"0");
 		}
+		System.out.println("删除成功");
 	}
 
 	@Override
