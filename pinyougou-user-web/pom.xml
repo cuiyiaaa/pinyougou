@@ -54,6 +54,24 @@
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
 
+		<!-- spring securiyt集成cas包 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<!-- 排除依赖 -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 
 		<!-- dubbo相关 -->
 		<dependency>
