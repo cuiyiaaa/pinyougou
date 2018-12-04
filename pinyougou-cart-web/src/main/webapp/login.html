@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- login.html点击login进行登录，但是在spring security中没有放行login.html，所以跳转到CAS的登录页面。
+登录成功后(从哪里来在回哪里去)，CAS会跳转回原页面(login)，而 login.html里编写了一个跳转cart页面的js脚本-->
+<script type="text/javascript">
+location.href="cart.html";
+</script>
+</body>
+</html>

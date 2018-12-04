@@ -1,0 +1,131 @@
+.ui-dialog {
+	border: 4px solid rgba(0, 0, 0, .1);
+	border: 4px solid #ccc\9;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.ui-dialog-content {
+	padding: 10px;
+	overflow: auto;
+	background: #fff;
+}
+
+.ui-dialog-content {
+	padding: 10px;
+	overflow: auto;
+	background: #fff;
+}
+
+.cart-warn-sysdialog {
+	font-family: "Microsoft Yahei";
+}
+
+.ac {
+	text-align: center;
+}
+
+.ui-dialog-close {
+	cursor: pointer;
+	display: block;
+	position: absolute;
+	z-index: 100000;
+	top: 10px;
+	right: 10px;
+	overflow: hidden;
+	width: 13px;
+	height: 13px;
+	background:
+		url(//misc.360buyimg.com/jdf/1.0.0/ui/dialog/1.0.0/dialog.png)
+		no-repeat;
+	font-size: 0;
+}
+
+.ui-dialog-close {
+	cursor: pointer;
+	display: block;
+	position: absolute;
+	z-index: 100000;
+	top: 10px;
+	right: 10px;
+	overflow: hidden;
+	width: 13px;
+	height: 13px;
+	background: url(/img/dialog.png) no-repeat;
+	font-size: 0;
+}
+
+.cart-warn-sysdialog .warn-tip-ico {
+	width: 48px;
+	height: 48px;
+	background: url(/img/111.png) 0 0 no-repeat;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	vertical-align: middle;
+	*top: -1px;
+	margin-top: 50px;
+	margin-bottom: 20px;
+}
+
+.cart-warn-sysdialog .tit {
+	font-size: 16px;
+	color: #333;
+	line-height: 1.2;
+	vertical-align: middle;
+	min-height: 24px;
+}
+
+.cart-warn-sysdialog a.btn-1 {
+	width: 96px;
+	padding: 0;
+	height: 36px;
+	line-height: 36px;
+	font-size: 16px;
+	border-radius: 0;
+}
+
+.btn-1 {
+	font-family: arial, "Microsoft YaHei";
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	height: 25px;
+	line-height: 25px;
+	background-color: #e74649;
+	background-image: -moz-linear-gradient(top, #e74649, #df3134);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e74649),
+		color-stop(1, #df3134));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e74649',
+		endColorstr='#df3134', GradientType='0');
+	-ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e74649',
+		endColorstr='#df3134');
+	background-image: linear-gradient(to top, #e74649 0, #df3134 100%);
+	border-radius: 3px;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 400;
+	padding: 0 10px;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 0;
+	float: none;
+	transition: all .2s ease-out;
+}
+
+.mt20 {
+	margin-top: 20px;
+	text-decoration: none;
+}
+
+.mt20:hover {
+	text-decoration: none;
+	color: #fff;
+	background-color: #ED474A;
+}
+
+.disabled {
+	color: #ccc;
+	cursor: not-allowed;
+}
