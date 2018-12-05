@@ -7,9 +7,8 @@
 		<artifactId>pinyougou-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>pinyougou-cart-web</artifactId>
+	<artifactId>pinyougou-pay-service</artifactId>
 	<packaging>war</packaging>
-
 
 	<dependencies>
 		<!-- Spring -->
@@ -45,35 +44,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
-
-		<!-- spring security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-
-		<!-- spring securiyt集成cas包 -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-cas</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-core</artifactId>
-			<!-- 排除依赖 -->
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>log4j-over-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 		<!-- dubbo相关 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -108,46 +78,25 @@
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		
+		<!-- 微信支付SDK -->
 		<dependency>
-			<groupId>com.pinyougou</groupId>
-			<artifactId>pinyougou-pojo</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.github.wxpay</groupId>
+			<artifactId>wxpay-sdk</artifactId>
+			<version>0.0.3</version>
 		</dependency>
 
-
-		<dependency>
-			<groupId>com.pinyougou</groupId>
-			<artifactId>pinyougou-cart-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>com.pinyougou</groupId>
-			<artifactId>pinyougou-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>com.pinyougou</groupId>
-			<artifactId>pinyougou-user-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.pinyougou</groupId>
-			<artifactId>pinyougou-order-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>com.pinyougou</groupId>
 			<artifactId>pinyougou-pay-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>
@@ -157,7 +106,7 @@
 				<version>2.2</version>
 				<configuration>
 					<!-- 指定端口 -->
-					<port>9107</port>
+					<port>9000</port>
 					<!-- 请求路径 -->
 					<path>/</path>
 				</configuration>
