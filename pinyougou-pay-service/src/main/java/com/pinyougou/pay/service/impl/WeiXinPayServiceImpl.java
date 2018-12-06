@@ -22,10 +22,9 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
 
 	@Value("${partnerkey}")
 	private String partnerkey;
-	
+
 	/**
-	 * out_trade_no：商户系统内部订单号
-	 * total_fee：总金额
+	 * out_trade_no：商户系统内部订单号 total_fee：总金额
 	 */
 	@Override
 	public Map<String, String> createNavtive(String out_trade_no, String total_fee) {
@@ -67,7 +66,7 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
 			Map<String, String> mapResult = WXPayUtil.xmlToMap(xmlResult);
 			System.out.println("微信返回结果：" + mapResult);
 
-			//将获取结果的一部分信息传递到前端，不要把所有信息度传递到前端
+			// 将获取结果的一部分信息传递到前端，不要把所有信息度传递到前端
 			Map<String, String> map = new HashMap<>();
 			// 生成支付二维码的链接
 			map.put("code_url", mapResult.get("code_url"));
@@ -82,7 +81,7 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
 
 	@Override
 	public Map<String, String> queryPayStatus(String out_trade_no) {
-		//1.封装参数
+		// 1.封装参数
 		Map<String, String> param = new HashMap<>();
 		// 公众号Id
 		param.put("appid", appid);
@@ -92,21 +91,53 @@ public class WeiXinPayServiceImpl implements WeiXinPayService {
 		param.put("out_trade_no", out_trade_no);
 		// 随机字符串
 		param.put("nonce_str", WXPayUtil.generateNonceStr());
-		
+
 		try {
-			String xmlParam = WXPayUtil.generateSignedXml(param,partnerkey);
-			
-			//发送请求
-			HttpClient httpClient=new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+			String xmlParam = WXPayUtil.generateSignedXml(param, partnerkey);
+
+			// 发送请求
+			HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
 			httpClient.setHttps(true);
 			httpClient.setXmlParam(xmlParam);
 			httpClient.post();
-			
-			//接收返回结果
+
+			// 接收返回结果
 			String content = httpClient.getContent();
-			//转换为Map
+			// 转换为Map
 			Map<String, String> resultMap = WXPayUtil.xmlToMap(content);
 			return resultMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, String> closePay(String out_trade_no) {
+		// 1.封装参数
+		Map<String, String> param = new HashMap<>();
+		// 公众号Id
+		param.put("appid", appid);
+		// 商户号
+		param.put("mch_id", mch_id);
+		// 商户订单号
+		param.put("out_trade_no", out_trade_no);
+		// 随机字符串
+		param.put("nonce_str", WXPayUtil.generateNonceStr());
+
+		try {
+			String xmlParam = WXPayUtil.generateSignedXml(param, partnerkey);
+
+			HttpClient httpClient = new HttpClient("https://api.mch.weixin.qq.com/pay/closeorder");
+			httpClient.setHttps(true);
+			httpClient.setXmlParam(xmlParam);
+			httpClient.post();
+			// 接收返回结果
+			String content = httpClient.getContent();
+			// 转换为Map
+			Map<String, String> resultMap = WXPayUtil.xmlToMap(content);
+			return resultMap;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -9,6 +9,26 @@
 	</parent>
 	<artifactId>pinyougou-dao</artifactId>
 
+	<!-- 默认为开发环境 -->
+	<properties>
+		<env>dev</env>
+	</properties>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<properties>
+				<env>pro</env>
+			</properties>
+		</profile>
+	</profiles>
+
+
 	<dependencies>
 
 		<dependency>
@@ -46,4 +66,17 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<!-- 定义过滤资源地址 -->
+		<filters>
+			<filter>src/main/resources/filters/db_${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<!-- 指定过滤范围，只在src/main/resources下进行过滤 -->
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>
